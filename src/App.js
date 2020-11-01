@@ -135,7 +135,7 @@ function App() {
     return (
       <div>
         {showLandingZone(loggedIn)}
-        <FoodList button_word="สั่งเลย" data={foodList} orders={orders} setOrders={setOrders}/>
+        <FoodList handler={()=>console.log(44)} button_word="สั่งเลย" data={foodList} orders={orders} setOrders={setOrders}/>
         {showShoppingMode(loggedIn, orders, setOrders)}
       </div>
     );

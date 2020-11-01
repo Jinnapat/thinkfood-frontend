@@ -57,7 +57,7 @@ export default function FoodList (props) {
                             </Grid>
                         </Box>
                         <img src={val.img} alt="preview" width="100%" />
-                        <Button onClick={e=>handleOrder(e, val)} variant="contained">{props.button_word}</Button>
+                        <Button onClick={e=>props.handler?props.handler:handleOrder(e, val)} variant="contained">{props.button_word}</Button>
                     </Box>
                 </Card>
             </Box>
