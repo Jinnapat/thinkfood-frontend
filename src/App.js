@@ -13,6 +13,7 @@ import Profile from './components/Profile';
 import TotalPriceBox from './components/TotalPriceBox';
 import { AppBar, Box } from '@material-ui/core';
 import Register from './components/Register'
+import ShopView from './components/ShopView'
 
 // set this to simulate log in or log out mode
 const defaultLogin = true;
@@ -44,9 +45,16 @@ const ThisfoodList = [
 ]
 
 function App() {
+  // true false
   const [loggedIn, setLoggedIn] = useState(defaultLogin);
+  
+  // [{name: "ชื่ออาหาร", quantity: 50, price: 50}, ...]
   const [orders, setOrders] = useState([]);
+  
+  // {name: "ชื่อผู้ใช้", email: ..., password: ..., role: "buyer/seller"}
   const [userData,setUserData] = useState({username: "test", pic: "logo512.png"});
+  
+  // [{name: ..., shop: ..., price: 50}, ...]
   const [foodList, setFoodList] = useState(ThisfoodList);
 
   function showLandingZone (loggedIn) {
@@ -83,6 +91,9 @@ function App() {
     <ThemeProvider theme={theme}>
       <Router>
         <Switch>
+          <Route path="/test">
+            <ShopView />
+          </Route>
           <Route path="/register">
             <Register />
           </Route>
