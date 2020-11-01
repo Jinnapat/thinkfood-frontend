@@ -5,16 +5,16 @@ import {
   Switch,
   Route
 } from 'react-router-dom';
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Landing from './components/Landing';
 import FoodList from './components/FoodList';
 import Profile from './components/Profile';
 import TotalPriceBox from './components/TotalPriceBox';
 import { AppBar, Box } from '@material-ui/core';
-import Register from './components/Register'
-import ShopView from './components/ShopView'
-import axios from 'axios';
-import Waiting from './components/Waiting'
+import Register from './components/Register';
+import ShopView from './components/ShopView';
+import Waiting from './components/Waiting';
+import API from './api/api';
 
 // set this to simulate log in or log out mode
 const defaultLogin = false;
@@ -103,6 +103,22 @@ function App() {
   });
   */
 
+  useEffect( async () =>{
+    // schema
+    // {
+    //   menu_id
+    //   menu_name
+    //   menu_description
+    //   menu_price
+    //   menu_shop_id_fk
+    // }
+
+    var res = await API.get('/common/get_menu');
+    console.log("this is the fetched data:", res.data.all_menu);
+    setFoodList(res.data.all_menu);
+
+  }, []);
+  
   function showLandingZone (loggedIn) {
     if (!loggedIn) {
       return <Landing />

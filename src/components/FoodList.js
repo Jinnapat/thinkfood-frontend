@@ -16,7 +16,7 @@ export default function FoodList (props) {
             }));
         }, 1000);
         return () => clearInterval(interval);
-    }, [data]);
+    }, []);
 
     function getQueue(queue) {
         return "รออีก " + queue + " คิว"
@@ -39,13 +39,17 @@ export default function FoodList (props) {
         props.setOrders(newOrder);
     }
 
-    function pickHandler() {
-
-    }
-
+        // [{
+        //     menu_id
+        //     menu_name
+        //     menu_description
+        //     menu_price
+        //     menu_shop_id_fk
+        // }]
     const el = data.map((val)=> {
+        console.log(val);
         return (
-            <Box mb={2} key={val.id}>
+            <Box mb={2} key={val.MENU_ID}>
                 <Card>
                     <Box pb={1} pl={1} pr={1}>
                         <Box pb={2}>
