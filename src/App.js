@@ -87,22 +87,6 @@ function App() {
   // set orders for chef
   const [todo, setTodo] = useState(orderfromback);
 
-  /*
-  function requestQueue () {
-    axios.get('localhost:3000')
-    .then(res => {
-      const persons = res.data;
-      this.setState({ persons });
-    });
-  }
-
-  useEffect(()=>{
-    const interval = setInterval(() => {
-      requestQueue();
-    }, 5000);
-  });
-  */
-
   useEffect( async () =>{
     // schema
     // {

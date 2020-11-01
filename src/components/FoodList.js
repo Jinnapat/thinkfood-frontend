@@ -53,14 +53,14 @@ export default function FoodList (props) {
                 <Card>
                     <Box pb={1} pl={1} pr={1}>
                         <Box pb={2}>
-                            <h2>เมนู {val.name}</h2>
+                            <h2>เมนู {val.MENU_NAME}</h2>
                             <Grid container>
-                                <Grid item xs={5}>ร้าน {val.shop}</Grid>
+                                <Grid item xs={5}>ร้าน {val.MENU_SHOP_ID_FK}</Grid>
                                 <Grid item xs={4}><Chip label={getQueue(val.queue)} /></Grid>
-                                <Grid item xs={3}><Chip label={val.price + " บาท"} /></Grid>
+                                <Grid item xs={3}><Chip label={val.MENU_PRICE + " บาท"} /></Grid>
                             </Grid>
                         </Box>
-                        <img src={val.img} alt="preview" width="100%" />
+                        <img src="food.jpg" alt="preview" width="100%" />
                         <Button onClick={e=>props.handler?props.handler:handleOrder(e, val)} variant="contained">{props.button_word}</Button>
                     </Box>
                 </Card>

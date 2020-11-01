@@ -53,25 +53,20 @@ app.get("/get_menu", (req, res) => {
 
 // name,pass,email,d,m,y
 app.post("/register", (req, res) =>{
-    var name = req.body.name;
-    var pass = req.body.pass;
+    console.log(req.body);
+    var name = req.body.username;
+    var pass = req.body.password;
     var email = req.body.email;
-    var d = req.body.d;
-    var m = req.body.m;
-    var y = req.body.y;
+    var date = req.body.date;
 
     var con = mysql.createConnection(database_info);
 
-    var y = res.body.year;
-    var m = res.body.month;
-    var d = res.body.day;
     con.query(`SELECT * FROM CUSTOMER WHERE CUSTOMER_USERNAME = '${name}'`, function (err, result) {
         if (err) throw err;
         // User doesn't already exist
         if (result.length === 0){
-        var bd = y+"-"+m+"-"+d;
         var sql = `INSERT INTO CUSTOMER (CUSTOMER_ID,CUSTOMER_USERNAME,CUSTOMER_PASSWORD,
-            CUSTOMER_EMAIL,CUSTOMER_BIRTHDAY) VALUES (DEFAULT,'${name}','${pass}','${email}','${bd}')`;
+            CUSTOMER_EMAIL,CUSTOMER_BIRTHDAY) VALUES (DEFAULT,'${name}','${pass}','${email}','${date}')`;
         con.query(sql, function (err, result) {
             if (err) throw err;
             console.log(`1 record inserted (${name})`);
@@ -84,7 +79,6 @@ app.post("/register", (req, res) =>{
             res.status(423).send({err: `The username "${name}" is already in use. Please try again.`});
         }
     });
-    con.end();
 });
 
 
