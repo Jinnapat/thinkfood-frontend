@@ -1,76 +1,85 @@
 import { useState } from 'react';
-import { Box, Button, Typography } from '@material-ui/core';
+import { AppBar, Box, Button, Typography, Grid } from '@material-ui/core';
 import RestaurantMenuIcon from '@material-ui/icons/RestaurantMenu';
 import FastfoodIcon from '@material-ui/icons/Fastfood';
 
-var orderfromback = ['ไข่ต้ม','มาม่า','ไก่ย่าง','ปลาเผา','เป็ดปักกิ่งแช่น้ำปลา','ข้าวต้มปลา','ปลาเผา','มาม่าผัด','ไข่ดาว','แมวผัดเผ็ด','แกงกะหรี่เต่า','ปลาหมึกผัดวุ้นเส้น','แกงเป็ด']
-
-function Call() {
+function Call(props) {
     // รายการออร์เดอร์ที่สั่งจาก backend
-    const [orderdata] = useState([]);
+    const [orderdata, setOrderdata] = useState(props.todo);
     // รายการอาหารที่เสร็จแล้วจาก backend
-    const [cookeddata] = useState([]);
+    const [cookeddata, setCookdata] = useState([]);
     // รายการอาหารที่ส่งเรียบร้อย
-    const [sendedmenu] = useState([]);
-    const [ordernum,setOrdernum] = useState(0);
-    const [cookednum,setCookednum] = useState(0);
-    const [sendednum,setSendednum] = useState(0);
-    const [count,setCount] = useState(0);
+    const [sendedmenu, setSendedmenu] = useState([]);
 
-    function calledorder() {
-        if (orderfromback.length-1>=ordernum){
-            setOrdernum(ordernum+1);
-            orderdata.push(orderfromback[ordernum]);
-        }
+    function cookedcall(e, val) {
+        const newOrders = orderdata.slice();
+        const newCooked = cookeddata.slice();
+        newOrders.splice(newOrders.indexOf(val), 1);
+        newCooked.push(val);
+        setOrderdata(newOrders);
+        setCookdata(newCooked);
     }
 
-    function cookedcall() {
-        setCookednum(cookednum+1);
-        orderdata.splice(0,1);
-        cookeddata.push(orderfromback[cookednum]);
+    function sended(val) {
+        const newCooked = cookeddata.slice();
+        newCooked.splice(newCooked.indexOf(val), 1);
+        setCookdata(newCooked);
     }
 
-    function sended() {
-        setSendednum(sendednum+1);
-        cookeddata.splice(0,1);
-        sendedmenu.push(orderfromback[sendednum]);
-    }
-
-    function orderedbox({a,count}) {
+    function orderedbox(val, key, color, word, handler) {
+        const thisStyle = {background: color};
         return (
-            <p>
-                <Box boxShadow={1} width="80%" height="50%">{a}</Box>
-                <Button size='small' variant="contained" onClick={cookedcall} style={{background:'#F39C12'}}>ปรุงเสร็จแล้ว</Button>
-            </p>
-        );
-    }
-    function cookedbox({a,count}) {
-        return (
-            <p>
-                <Box boxShadow={1} width="80%" height="50%">{a}</Box>
-                <Button size='small' variant="contained" onClick={sended} style={{background:'#91BF40'}}>เสิร์ฟอาหารแล้ว</Button>
-            </p>
+            <Box mb={1} key={key}>
+                <Grid container>
+                    <Grid item xs={7}>
+                        {val.name}
+                    </Grid>
+                    <Grid item xs={2}>
+                        {val.time}
+                    </Grid>
+                    <Grid item xs={3}>
+                        <Button size='small' variant="contained" onClick={e=>handler(e,val)} style={thisStyle}>{word}</Button>
+                    </Grid>
+                </Grid>
+            </Box>
         );
     }
 
-    var ordernumber = 'Ordered Number: ' + Math.floor(ordernum)
-    var cooknumber = 'Cooked Number: ' + Math.floor(cookednum)
-    var sendnumber = 'Sended Number: ' + Math.floor(sendednum)
+    let i = 0;
+    const toCookEl = orderdata.map((val) => {
+        i += 1;
+        return orderedbox(val, i, '#F39C12', 'ทำแล้ว', cookedcall)
+    });
+
+    i = 0;
+    const toServeEl = cookeddata.map((val) => {
+        i += 1;
+        return orderedbox(val, i, '#91BF40', 'รับแล้ว', sended)
+    });
+
     return (
-        <div>
-            <p>{ordernumber}</p>
-            <p>{cooknumber}</p>
-            <p>{sendnumber}</p>
-            <Button variant="contained" onClick={calledorder}>รับออร์เดอร์</Button>
-            <Typography variant="h4" gutterBottom style={{height:30,font:'Ariel'}}>รายการออร์เดอร์ที่สั่ง<RestaurantMenuIcon fontSize='large'/></Typography>
-            <Box boxShadow={1} style={{height:300,width:500,overflow:'auto'}}>
-                <p>{orderdata.map(a => orderedbox({a,count}))}</p>
+        <Box p={2} pt={8}>
+            <AppBar>
+                <Box p={1}>
+                    <Grid container>
+                        <Grid item xs={9}>
+                            <Box p={1}><b>ThinkFood</b></Box>
+                        </Grid>
+                        <Grid item xs={3}>
+                            <Button>Log out</Button>
+                        </Grid>
+                    </Grid>
+                </Box>
+            </AppBar>
+            <Typography variant="h5" gutterBottom style={{height:30,font:'Ariel'}}>รายการที่สั่ง<RestaurantMenuIcon fontSize='large'/></Typography>
+            <Box p={1} mt={2} mb={2} boxShadow={1} style={{height:200,overflow:'scroll'}}>
+                {toCookEl}
             </Box>
-            <Typography variant="h4" gutterBottom style={{height:30,font:'Ariel'}}>รายการอาหารที่ปรุงเสร็จแล้ว<FastfoodIcon fontSize='large'/></Typography>
-            <Box boxShadow={1} style={{height:300,width:500,overflow:'auto'}}>
-                <p>{cookeddata.map(a => cookedbox({a,count}))}</p>
+            <Typography variant="h5" gutterBottom style={{height:30,font:'Ariel'}}>รายการที่เสร็จแล้ว<FastfoodIcon fontSize='large'/></Typography>
+            <Box p={1} mt={2} boxShadow={1} style={{height:200,overflow:'scroll'}}>
+                {toServeEl}
             </Box>
-        </div>
+        </Box>
     );
 }
 

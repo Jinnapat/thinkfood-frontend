@@ -3,10 +3,9 @@ import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Link
+  Route
 } from 'react-router-dom';
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Landing from './components/Landing';
 import FoodList from './components/FoodList';
 import Profile from './components/Profile';
@@ -14,9 +13,44 @@ import TotalPriceBox from './components/TotalPriceBox';
 import { AppBar, Box } from '@material-ui/core';
 import Register from './components/Register'
 import ShopView from './components/ShopView'
+import axios from 'axios';
+import Waiting from './components/Waiting'
 
 // set this to simulate log in or log out mode
-const defaultLogin = true;
+const defaultLogin = false;
+const testUser = {
+  username: "test", 
+  pic: "logo512.png", 
+  role: "buyer"
+};
+// debug zone
+
+const ThisfoodList = [
+  {id: 1, price: 50, name: "mama", shop:"CP", img: "food.jpg", queue: 10},
+  {id: 2, price: 30, name: "mama1", shop:"CP1", img: "food.jpg", queue: 100},
+  {id: 3, price: 40, name: "mama2", shop:"CP2", img: "food.jpg", queue: 20},
+  {id: 4, price: 70, name: "mama3", shop:"CP3", img: "food.jpg", queue: 50},
+  {id: 5, price: 100, name: "mama4", shop:"CP3", img: "food.jpg", queue: 50}
+]
+
+const orderfromback = [
+  {id: 1, name: 'ไข่ต้ม', time: '10:30'},
+  {id: 2, name: 'มาม่า', time: '10:30'},
+  {id: 3, name: 'ไก่ย่าง', time: '10:30'},
+  {id: 4, name: 'ปลาเผา', time: '10:30'},
+  {id: 5, name: 'เป็ดปักกิ่งแช่น้ำปลา', time: '10:30'},
+  {id: 6, name: 'ข้าวต้มปลา', time: '10:30'},
+  {id: 7, name: 'ปลาเผา', time: '10:30'},
+  {id: 8, name: 'เป็ดปักกิ่งแช่น้ำปลา', time: '10:30'},
+  {id: 9, name: 'ข้าวต้มปลา', time: '10:30'}
+]
+
+const ordertest = [
+  {name: "omelet", shop: "test shop", price: 10, quantity: 20},
+  {name: "omelet", shop: "test shop", price: 10, quantity: 20},
+  {name: "omelet", shop: "test shop", price: 10, quantity: 20}
+]
+// end debug zone
 
 const theme = createMuiTheme({
   spacing: 8,
@@ -36,14 +70,6 @@ const theme = createMuiTheme({
   },
 });
 
-const ThisfoodList = [
-  {id: 1, price: 50, name: "mama", shop:"CP", img: "food.jpg", queue: 10},
-  {id: 2, price: 30, name: "mama1", shop:"CP1", img: "food.jpg", queue: 100},
-  {id: 3, price: 40, name: "mama2", shop:"CP2", img: "food.jpg", queue: 20},
-  {id: 4, price: 70, name: "mama3", shop:"CP3", img: "food.jpg", queue: 50},
-  {id: 5, price: 100, name: "mama4", shop:"CP3", img: "food.jpg", queue: 50}
-]
-
 function App() {
   // true false
   const [loggedIn, setLoggedIn] = useState(defaultLogin);
@@ -52,10 +78,30 @@ function App() {
   const [orders, setOrders] = useState([]);
   
   // {name: "ชื่อผู้ใช้", email: ..., password: ..., role: "buyer/seller"}
-  const [userData,setUserData] = useState({username: "test", pic: "logo512.png"});
+  const [userData,setUserData] = useState(testUser);
   
   // [{name: ..., shop: ..., price: 50}, ...]
   const [foodList, setFoodList] = useState(ThisfoodList);
+
+  // [{name: ..., shop: ..., time: 11.30}]
+  // set orders for chef
+  const [todo, setTodo] = useState(orderfromback);
+
+  /*
+  function requestQueue () {
+    axios.get('localhost:3000')
+    .then(res => {
+      const persons = res.data;
+      this.setState({ persons });
+    });
+  }
+
+  useEffect(()=>{
+    const interval = setInterval(() => {
+      requestQueue();
+    }, 5000);
+  });
+  */
 
   function showLandingZone (loggedIn) {
     if (!loggedIn) {
@@ -77,7 +123,15 @@ function App() {
     }
   }
   
-  function MainPage() {
+  function MainPage(props) {
+    if (props.loggedIn) {
+      if (props.userData.role == "seller") {
+        return (
+          <ShopView todo={todo} />
+        );
+      }
+    }
+
     return (
       <div>
         {showLandingZone(loggedIn)}
@@ -85,15 +139,13 @@ function App() {
         {showShoppingMode(loggedIn, orders, setOrders)}
       </div>
     );
+    
   }
 
   return (
     <ThemeProvider theme={theme}>
       <Router>
         <Switch>
-          <Route path="/test">
-            <ShopView />
-          </Route>
           <Route path="/register">
             <Register />
           </Route>
@@ -101,10 +153,10 @@ function App() {
             <Profile userData={userData}/>
           </Route>
           <Route path="/waiting">
-            sdkfew
+            <Waiting component={ordertest} payment={false}/>
           </Route>
           <Route path="/">
-            <MainPage />
+            <MainPage loggedIn={loggedIn} userData={userData}/>
           </Route>
         </Switch>
       </Router>

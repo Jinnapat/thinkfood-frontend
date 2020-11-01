@@ -1,20 +1,19 @@
-import React, { useState } from 'react';
-import { AppBar, Button, Slide, TextField, Box } from '@material-ui/core';
+import { Button, TextField, Box } from '@material-ui/core';
 
 function LoginBox () {
-
+  
   return (
-    <Box p={2}>
+    <Box>
       <form target="" method="post">
           <Box mb={2}>
-            <TextField label="username" name="username"/>
+            <TextField label="username" name="username" required />
           </Box>
           <Box mb={2}>
-            <TextField label="password" name="password"/>
+            <TextField label="password" name="password" type="password" required/>
           </Box>
           <Box mb={2}>
-            <Button type="submit">ล็อกอิน</Button>
-            <a href="/register"><Button>สมัคร</Button></a>
+            <Button type="submit" style={{color: "white"}}>ล็อกอิน</Button>
+            <a href="/register" ><Button style={{color: "white"}}>สมัคร</Button></a>
           </Box>
       </form>
     </Box>

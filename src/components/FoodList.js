@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Chip, Button, Card, Container } from '@material-ui/core';
+import { useState, useEffect } from 'react';
+import { Box, Chip, Button, Card, Container, Grid } from '@material-ui/core';
 
 
 export default function FoodList (props) {
@@ -39,6 +39,10 @@ export default function FoodList (props) {
         props.setOrders(newOrder);
     }
 
+    function pickHandler() {
+
+    }
+
     const el = data.map((val)=> {
         return (
             <Box mb={2} key={val.id}>
@@ -46,9 +50,11 @@ export default function FoodList (props) {
                     <Box pb={1} pl={1} pr={1}>
                         <Box pb={2}>
                             <h2>เมนู {val.name}</h2>
-                            <a>ร้าน {val.shop}</a>
-                            <Chip label={getQueue(val.queue)} />
-                            <Chip label={val.price + " บาท"} />
+                            <Grid container>
+                                <Grid item xs={5}>ร้าน {val.shop}</Grid>
+                                <Grid item xs={4}><Chip label={getQueue(val.queue)} /></Grid>
+                                <Grid item xs={3}><Chip label={val.price + " บาท"} /></Grid>
+                            </Grid>
                         </Box>
                         <img src={val.img} alt="preview" width="100%" />
                         <Button onClick={e=>handleOrder(e, val)} variant="contained">{props.button_word}</Button>
