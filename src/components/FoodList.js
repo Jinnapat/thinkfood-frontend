@@ -16,7 +16,7 @@ export default function FoodList (props) {
             }));
         }, 1000);
         return () => clearInterval(interval);
-    }, [data]);
+    }, []);
 
     function getQueue(queue) {
         return "รออีก " + queue + " คิว"
@@ -39,18 +39,26 @@ export default function FoodList (props) {
         props.setOrders(newOrder);
     }
 
+        // [{
+        //     menu_id
+        //     menu_name
+        //     menu_description
+        //     menu_price
+        //     menu_shop_id_fk
+        // }]
     const el = data.map((val)=> {
+        console.log(val);
         return (
-            <Box mb={2} key={val.id}>
+            <Box mb={2} key={val.MENU_ID}>
                 <Card>
                     <Box pb={1} pl={1} pr={1}>
                         <Box pb={2}>
-                            <h2>เมนู {val.name}</h2>
-                            <a>ร้าน {val.shop}</a>
+                            <h2>เมนู {val.MENU_NAME}</h2>
+                            <a>ร้าน {val.MENU_SHOP_ID_FK}</a>
                             <Chip label={getQueue(val.queue)} />
-                            <Chip label={val.price + " บาท"} />
+                            <Chip label={val.MENU_PRICE + " บาท"} />
                         </Box>
-                        <img src={val.img} alt="preview" width="100%" />
+                        <img src="food.jpg" alt="preview" width="100%" />
                         <Button onClick={e=>handleOrder(e, val)} variant="contained">{props.button_word}</Button>
                     </Box>
                 </Card>
