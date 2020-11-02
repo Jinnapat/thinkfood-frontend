@@ -10,14 +10,14 @@ import Landing from './components/Landing';
 import FoodList from './components/FoodList';
 import Profile from './components/Profile';
 import TotalPriceBox from './components/TotalPriceBox';
-import { AppBar, Box } from '@material-ui/core';
+import { AppBar, Box, Button, Grid } from '@material-ui/core';
 import Register from './components/Register';
 import ShopView from './components/ShopView';
 import Waiting from './components/Waiting';
 import API from './api/api';
 
 // set this to simulate log in or log out mode
-const defaultLogin = false;
+const defaultLogin = true;
 const testUser = {
   username: "test", 
   pic: "logo512.png", 
@@ -87,22 +87,6 @@ function App() {
   // set orders for chef
   const [todo, setTodo] = useState(orderfromback);
 
-  /*
-  function requestQueue () {
-    axios.get('localhost:3000')
-    .then(res => {
-      const persons = res.data;
-      this.setState({ persons });
-    });
-  }
-
-  useEffect(()=>{
-    const interval = setInterval(() => {
-      requestQueue();
-    }, 5000);
-  });
-  */
-
   useEffect( async () =>{
     // schema
     // {
@@ -125,19 +109,21 @@ function App() {
     } else {
       return (
         <AppBar>
-          <Box p={2}>
-            Logged In
+          <Box p={1}>
+            <Grid container>
+              <Grid item xs={9}>
+                <Box p={1}><b>ThinkFood</b></Box>
+              </Grid>
+              <Grid item xs={3}>
+                <Button style={{color: "white"}}>Log Out</Button>
+              </Grid>
+            </Grid>
           </Box>
         </AppBar>
       );
     }
   }
   
-  function showShoppingMode (loggedIn, orders, setOrders) {
-    if (loggedIn) {
-      return <TotalPriceBox orders={orders} setOrders={setOrders}/>
-    }
-  }
   
   function MainPage(props) {
     if (props.loggedIn) {
@@ -150,9 +136,9 @@ function App() {
 
     return (
       <div>
-        {showLandingZone(loggedIn)}
-        <FoodList handler={()=>console.log(44)} button_word="สั่งเลย" data={foodList} orders={orders} setOrders={setOrders}/>
-        {showShoppingMode(loggedIn, orders, setOrders)}
+        {showLandingZone (loggedIn)}
+        <FoodList button_word="สั่งเลย" data={foodList} orders={orders} setOrders={setOrders}/>
+        {loggedIn ? <TotalPriceBox orders={orders} setOrders={setOrders}/> : undefined}
       </div>
     );
     

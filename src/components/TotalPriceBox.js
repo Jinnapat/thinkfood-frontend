@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AppBar, Box, Chip, Button } from '@material-ui/core';
+import { AppBar, Box, Chip, Button, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import OrderBox from './OrderBox';
 
@@ -37,7 +37,7 @@ function TotalPriceBox (props) {
             <AppBar className={classes.appBar}>
                 <Box p={1}>
                     <Chip label={Calculate(props.orders)} />
-                    <Button onClick={toggleShow}>รายการ</Button>
+                    <Button style={{color: "white", width: 80}} onClick={toggleShow}>รายการ</Button>
                 </Box>
             </AppBar>
         </div>

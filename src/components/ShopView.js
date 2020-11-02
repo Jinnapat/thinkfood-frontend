@@ -66,7 +66,7 @@ function Call(props) {
                             <Box p={1}><b>ThinkFood</b></Box>
                         </Grid>
                         <Grid item xs={3}>
-                            <Button>Log out</Button>
+                            <Button style={{color: "white"}}>Log out</Button>
                         </Grid>
                     </Grid>
                 </Box>

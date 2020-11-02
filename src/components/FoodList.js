@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Box, Chip, Button, Card, Container, Grid } from '@material-ui/core';
+import { Box, Chip, Button, Card, Grid } from '@material-ui/core';
 
 
 export default function FoodList (props) {
@@ -18,10 +18,6 @@ export default function FoodList (props) {
         return () => clearInterval(interval);
     }, []);
 
-    function getQueue(queue) {
-        return "รออีก " + queue + " คิว"
-    }
-
     function handleOrder(e, menu) {
         let added = false;
         let newOrder = [];
@@ -39,6 +35,14 @@ export default function FoodList (props) {
         props.setOrders(newOrder);
     }
 
+    function handleClick(e, val) {
+        console.log(props.handler)
+        if (props.handler) {
+            props.handler()
+        } else {
+            handleOrder(e, val)
+        }
+    }
         // [{
         //     menu_id
         //     menu_name
@@ -47,21 +51,20 @@ export default function FoodList (props) {
         //     menu_shop_id_fk
         // }]
     const el = data.map((val)=> {
-        console.log(val);
         return (
             <Box mb={2} key={val.MENU_ID}>
                 <Card>
                     <Box pb={1} pl={1} pr={1}>
                         <Box pb={2}>
-                            <h2>เมนู {val.name}</h2>
+                            <h2>เมนู {val.MENU_NAME}</h2>
                             <Grid container>
-                                <Grid item xs={5}>ร้าน {val.shop}</Grid>
-                                <Grid item xs={4}><Chip label={getQueue(val.queue)} /></Grid>
-                                <Grid item xs={3}><Chip label={val.price + " บาท"} /></Grid>
+                                <Grid item xs={5}>ร้าน {val.MENU_SHOP_ID_FK}</Grid>
+                                <Grid item xs={4}><Chip label={"รอ " + val.queue + " คิว"} /></Grid>
+                                <Grid item xs={3}><Chip label={val.MENU_PRICE + " บาท"} /></Grid>
                             </Grid>
                         </Box>
-                        <img src={val.img} alt="preview" width="100%" />
-                        <Button onClick={e=>props.handler?props.handler:handleOrder(e, val)} variant="contained">{props.button_word}</Button>
+                        <img src={val.img?val.img:"food.jpg"} alt="preview" width="100%" />
+                        <Button onClick={e=>handleClick(e, val)} variant="contained">{props.button_word}</Button>
                     </Box>
                 </Card>
             </Box>
